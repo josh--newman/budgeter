@@ -17,7 +17,8 @@ function Categories(props) {
           return (
             <li key={category.id}>
               <p>
-                {category.display} - ${totalSpent} / ${category.amount}
+                {category.display} - ${parseFloat(totalSpent)} / $
+                {category.amount}
               </p>
             </li>
           );
@@ -26,7 +27,6 @@ function Categories(props) {
       <form
         onSubmit={e => {
           e.preventDefault();
-          console.log("adding category:", nameInputValue);
           const category = {
             id: nameInputValue.toLowerCase(),
             display: nameInputValue,

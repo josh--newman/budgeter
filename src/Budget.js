@@ -6,18 +6,16 @@ import Expenses from "./Expenses";
 
 const Budget = ({ match }) => {
   const budget = useFetchBudget(match.params.id);
-  const addCategory = async category => {
-    await db
-      .collection("budgets")
+  const addCategory = category => {
+    db.collection("budgets")
       .doc(match.params.id)
       .set({
         ...budget,
         categories: [...budget.categories, category]
       });
   };
-  const addExpense = async expense => {
-    await db
-      .collection("budgets")
+  const addExpense = expense => {
+    db.collection("budgets")
       .doc(match.params.id)
       .set({
         ...budget,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Budget from "./Budget";
 import db from "./firebase";
@@ -24,25 +24,30 @@ const useBudgets = db => {
   return budgets;
 };
 
-function App() {
+const BudgetList = () => {
   const budgets = useBudgets(db);
+  return !budgets ? (
+    <div>Loading...</div>
+  ) : (
+    <Fragment>
+      <h2>Select a budget</h2>
+      <ul>
+        {budgets.map(budget => {
+          return (
+            <li key={budget.id}>
+              <Link to={`/budget/${budget.id}`}>{budget.name}</Link>
+            </li>
+          );
+        })}
+      </ul>
+    </Fragment>
+  );
+};
 
+function App() {
   return (
     <Router>
-      {!budgets ? (
-        <div>Loading...</div>
-      ) : (
-        <ul>
-          {budgets.map(budget => {
-            return (
-              <li key={budget.id}>
-                <Link to={`/budget/${budget.id}`}>{budget.name}</Link>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-
+      <Route exact path="/" component={BudgetList} />
       <Route path="/budget/:id" component={Budget} />
     </Router>
   );

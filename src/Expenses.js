@@ -16,7 +16,8 @@ function Expenses(props) {
           return (
             <li key={expense.date}>
               <p>
-                {category.display} - ${expense.amount} - {expense.date}
+                {category.display} - ${parseFloat(expense.amount)} -{" "}
+                {expense.date}
               </p>
             </li>
           );

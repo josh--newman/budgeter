@@ -12,7 +12,6 @@ const useFetchBudget = id => {
         .onSnapshot(doc => setBudget(doc.data()));
     };
     if (db) {
-      console.log("getting data");
       getBudgets();
     }
   }, [id]);
