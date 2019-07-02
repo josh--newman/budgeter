@@ -1,55 +1,66 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import Auth, { AuthUserContext } from "./Auth";
+import BudgetList from "./BudgetList";
 import Budget from "./Budget";
-import db from "./firebase";
+import { FirebaseContext } from "./firebase";
 
-const useBudgets = db => {
-  const [budgets, setBudgets] = useState(null);
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  const authUser = useContext(AuthUserContext);
 
-  useEffect(() => {
-    const getBudgets = async () => {
-      const snapshot = await db.collection("budgets").get();
-      let budgetData = [];
-      snapshot.forEach(doc => {
-        const item = { id: doc.id, ...doc.data() };
-        budgetData.push(item);
-      });
-      setBudgets(budgetData);
-    };
-    if (db) {
-      getBudgets();
-    }
-  }, [db]);
-
-  return budgets;
-};
-
-const BudgetList = () => {
-  const budgets = useBudgets(db);
-  return !budgets ? (
-    <div>Loading...</div>
-  ) : (
-    <Fragment>
-      <h2>Select a budget</h2>
-      <ul>
-        {budgets.map(budget => {
-          return (
-            <li key={budget.id}>
-              <Link to={`/budget/${budget.id}`}>{budget.name}</Link>
-            </li>
-          );
-        })}
-      </ul>
-    </Fragment>
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        !authUser.hasInitialised ? null : authUser.details ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/auth",
+              state: { from: props.location }
+            }}
+          />
+        )
+      }
+    />
   );
 };
 
 function App() {
+  const [authUser, setAuthUser] = useState({
+    hasInitialised: false,
+    details: null
+  });
+  console.log(authUser);
+  const firebase = useContext(FirebaseContext);
+
+  useEffect(() => {
+    const listener = firebase.auth.onAuthStateChanged(authUser => {
+      return authUser
+        ? setAuthUser({
+            hasInitialised: true,
+            details: {
+              displayName: authUser.displayName,
+              email: authUser.email
+            }
+          })
+        : setAuthUser({
+            hasInitialised: true,
+            details: null
+          });
+    });
+    return () => listener();
+  }, [firebase]);
+
   return (
-    <Router>
-      <Route exact path="/" component={BudgetList} />
-      <Route path="/budget/:id" component={Budget} />
-    </Router>
+    <AuthUserContext.Provider value={authUser}>
+      <Router>
+        <PrivateRoute exact path="/" component={BudgetList} />
+        <Route exact path="/auth" component={Auth} />
+        <PrivateRoute path="/budget/:id" component={Budget} />
+      </Router>
+    </AuthUserContext.Provider>
   );
 }
 

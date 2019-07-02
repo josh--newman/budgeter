@@ -1,13 +1,15 @@
-import React, { Fragment } from "react";
-import db from "./firebase";
+import React, { Fragment, useContext } from "react";
+import { FirebaseContext } from "./firebase";
 import useFetchBudget from "./useFetchBudget";
 import Categories from "./Categories";
 import Expenses from "./Expenses";
 
 const Budget = ({ match }) => {
+  const firebase = useContext(FirebaseContext);
   const budget = useFetchBudget(match.params.id);
   const addCategory = category => {
-    db.collection("budgets")
+    firebase.database
+      .collection("budgets")
       .doc(match.params.id)
       .set({
         ...budget,
@@ -15,7 +17,8 @@ const Budget = ({ match }) => {
       });
   };
   const addExpense = expense => {
-    db.collection("budgets")
+    firebase.database
+      .collection("budgets")
       .doc(match.params.id)
       .set({
         ...budget,

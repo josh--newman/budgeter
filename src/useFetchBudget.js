@@ -1,20 +1,21 @@
-import { useState, useEffect } from "react";
-import db from "./firebase";
+import { useState, useEffect, useContext } from "react";
+import { FirebaseContext } from "./firebase";
 
 const useFetchBudget = id => {
+  const firebase = useContext(FirebaseContext);
   const [budget, setBudget] = useState(null);
 
   useEffect(() => {
     const getBudgets = async () => {
-      await db
+      await firebase.database
         .collection("budgets")
         .doc(id)
         .onSnapshot(doc => setBudget(doc.data()));
     };
-    if (db) {
+    if (firebase) {
       getBudgets();
     }
-  }, [id]);
+  }, [id, firebase]);
 
   return budget;
 };
