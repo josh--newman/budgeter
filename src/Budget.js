@@ -1,8 +1,26 @@
-import React, { Fragment, useContext } from "react";
+/** @jsx jsx */
+import { jsx } from "@emotion/core";
+import { useContext } from "react";
 import { FirebaseContext } from "./firebase";
 import useFetchBudget from "./useFetchBudget";
 import Categories from "./Categories";
 import Expenses from "./Expenses";
+
+const styles = {
+  header: {
+    padding: 10,
+    backgroundColor: "rebeccapurple",
+    color: "white",
+    textAlign: "center",
+    "> h1": {
+      margin: 0,
+      marginBottom: 10
+    },
+    "> p": {
+      margin: 0
+    }
+  }
+};
 
 const Budget = ({ match }) => {
   const firebase = useContext(FirebaseContext);
@@ -26,10 +44,19 @@ const Budget = ({ match }) => {
       });
   };
 
+  const totalSpent = (budget ? budget.expenses : []).reduce((acc, e) => {
+    return acc + e.amount;
+  }, 0);
+
   return !budget ? (
     <div>Loading...</div>
   ) : (
-    <Fragment>
+    <div>
+      <section css={styles.header}>
+        <h1>{budget.name}</h1>
+        <p>Total: ${budget.totalAmount}</p>
+        <p>Remaining: ${budget.totalAmount - totalSpent}</p>
+      </section>
       <Categories
         addCategory={addCategory}
         categories={budget.categories}
@@ -40,7 +67,7 @@ const Budget = ({ match }) => {
         categories={budget.categories}
         expenses={budget.expenses}
       />
-    </Fragment>
+    </div>
   );
 };
 

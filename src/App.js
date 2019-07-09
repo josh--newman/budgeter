@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import "./App.css";
 import Auth, { AuthUserContext } from "./Auth";
 import BudgetList from "./BudgetList";
 import Budget from "./Budget";
