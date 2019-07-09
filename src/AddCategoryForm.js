@@ -22,7 +22,7 @@ const AddCategoryForm = ({ onSave }) => {
 
   const disabled = !nameInputValue || !amountInputValue;
 
-  return isAdding ? (
+  return !isAdding ? (
     <div css={styles.plusButton}>
       <button onClick={() => setIsAdding(true)}>+</button>
     </div>
@@ -60,6 +60,7 @@ const AddCategoryForm = ({ onSave }) => {
       <button disabled={disabled} type="submit">
         Add
       </button>
+      <button onClick={() => setIsAdding(false)}>Cancel</button>
     </form>
   );
 };
