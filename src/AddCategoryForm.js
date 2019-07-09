@@ -8,16 +8,25 @@ const styles = {
     input: {
       fontSize: "inherit"
     }
+  },
+  plusButton: {
+    display: "flex",
+    justifyContent: "flex-end"
   }
 };
 
 const AddCategoryForm = ({ onSave }) => {
   const [nameInputValue, setNameInputValue] = useState("");
   const [amountInputValue, setAmountInputValue] = useState("");
+  const [isAdding, setIsAdding] = useState(false);
 
   const disabled = !nameInputValue || !amountInputValue;
 
-  return (
+  return isAdding ? (
+    <div css={styles.plusButton}>
+      <button onClick={() => setIsAdding(true)}>+</button>
+    </div>
+  ) : (
     <form
       css={styles.form}
       onSubmit={e => {
@@ -30,6 +39,7 @@ const AddCategoryForm = ({ onSave }) => {
         setNameInputValue("");
         setAmountInputValue("");
         onSave(category);
+        setIsAdding(false);
       }}
     >
       <input
