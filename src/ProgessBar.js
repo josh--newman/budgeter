@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 
 const styles = {
   barCss: {
-    height: 8,
+    height: 10,
     position: "relative",
     background: "#eee",
     borderRadius: 8,

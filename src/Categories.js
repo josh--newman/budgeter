@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { useState } from "react";
 import ProgressBar from "./ProgessBar";
+import AddCategoryForm from "./AddCategoryForm";
 
 const styles = {
   container: {
@@ -26,9 +26,6 @@ const styles = {
 };
 
 function Categories(props) {
-  const [nameInputValue, setNameInputValue] = useState("");
-  const [amountInputValue, setAmountInputValue] = useState("");
-
   return (
     <div css={styles.container}>
       <ul css={styles.list}>
@@ -53,38 +50,7 @@ function Categories(props) {
           );
         })}
       </ul>
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          const category = {
-            id: nameInputValue.toLowerCase(),
-            display: nameInputValue,
-            amount: parseFloat(amountInputValue)
-          };
-          setNameInputValue("");
-          setAmountInputValue("");
-          props.addCategory(category);
-        }}
-      >
-        <label>
-          Name
-          <input
-            value={nameInputValue}
-            type="text"
-            onChange={e => setNameInputValue(e.target.value)}
-          />
-        </label>
-        <label>
-          Amount
-          <input
-            type="number"
-            min={0}
-            value={amountInputValue}
-            onChange={e => setAmountInputValue(e.target.value)}
-          />
-        </label>
-        <button type="submit">Add</button>
-      </form>
+      <AddCategoryForm onSave={props.addCategory} />
     </div>
   );
 }

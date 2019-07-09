@@ -62,11 +62,11 @@ const Budget = ({ match }) => {
         categories={budget.categories}
         expenses={budget.expenses}
       />
-      <Expenses
+      {/* <Expenses
         addExpense={addExpense}
         categories={budget.categories}
         expenses={budget.expenses}
-      />
+      /> */}
     </div>
   );
 };
