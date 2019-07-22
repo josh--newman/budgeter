@@ -39,12 +39,12 @@ function Categories(props) {
           }, 0);
 
           const amountRemaining = category.amount - totalSpent;
-          const percentSpent = (totalSpent / category.amount) * 100;
+          const percentRemaining = (amountRemaining / category.amount) * 100;
 
           return (
             <li css={styles.listItem} key={category.id}>
               <div>{category.display}</div>
-              <ProgressBar progress={percentSpent} />
+              <ProgressBar progress={percentRemaining} />
               <div css={styles.left}>${amountRemaining} left</div>
             </li>
           );

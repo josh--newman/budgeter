@@ -44,7 +44,7 @@ const Budget = ({ match }) => {
       });
   };
 
-  const totalSpent = (budget ? budget.expenses : []).reduce((acc, e) => {
+  const totalBudgeted = (budget ? budget.categories : []).reduce((acc, e) => {
     return acc + e.amount;
   }, 0);
 
@@ -55,7 +55,7 @@ const Budget = ({ match }) => {
       <section css={styles.header}>
         <h1>{budget.name}</h1>
         <p>Total: ${budget.totalAmount}</p>
-        <p>Remaining: ${budget.totalAmount - totalSpent}</p>
+        <p>Remaining: ${budget.totalAmount - totalBudgeted}</p>
       </section>
       <Categories
         addCategory={addCategory}
